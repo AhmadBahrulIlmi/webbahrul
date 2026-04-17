@@ -4,10 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProdukController;
-use App\Http\Controllers\EvaluasiController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\PeramalanController;
-use App\Http\Controllers\TransaksiController;
 
 //route login dan logout
 Route::get('/auth', [AuthController::class, 'index'])->name('auth.index');
@@ -49,22 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/produk/{id}', [ProdukController::class, 'update'])->name('produk.update');
     Route::delete('/produk/{id}', [ProdukController::class, 'delete'])->name('produk.delete');
 
-    //transaksi
-    Route::get('/transaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
-    Route::get('/transaksi/create', [TransaksiController::class, 'create'])->name('transaksi.create');
-    Route::post('/transaksi/store', [TransaksiController::class, 'store'])->name('transaksi.store');
-    Route::get('/transaksi/{id}/edit', [TransaksiController::class, 'edit'])->name('transaksi.edit');
-    Route::put('/transaksi/{id}/update', [TransaksiController::class, 'update'])->name('transaksi.update');
-    Route::delete('/transaksi/{id}/delete', [TransaksiController::class, 'delete'])->name('transaksi.delete');
-    Route::post('/transaksi/import', [TransaksiController::class, 'import'])->name('transaksi.import');
-
-    //peramalan
-    Route::match(['get', 'post'], '/peramalan', [PeramalanController::class, 'index'])->name('peramalan.index');
-    Route::post('/peramalan/store', [PeramalanController::class, 'store'])->name('peramalan.store');
-
-
-    //evaluasi hasil
-    Route::get('/evaluasi', [EvaluasiController::class, 'index'])->name('evaluasi.index');
-    Route::delete('/evaluasi/delete', [EvaluasiController::class, 'delete'])->name('evaluasi.delete');
-
+    Route::get('/viewer', function () {
+        return view('produk.viewer');
+    });
 });

@@ -4,42 +4,49 @@ namespace App\Http\Controllers;
 
 use App\Models\Produk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redirect;
 
 class ProdukController extends Controller
 {
     public function index(Request $request)
     {
-        //variabel yang menampung data produk
-        $query = Produk::query();
-
-        //mencari data produk berdasarkan nama produk
-        $produk = Produk::when($request->nama_produk, function($query) use ($request) {
-            $query->where('nama_produk', $request->nama_produk);
+        $produk = Produk::when($request->kode_produk, function($query) use ($request) {
+            $query->where('kode_produk', 'like', '%' . $request->kode_produk . '%');
         })->paginate(4);
 
-        //menampung data produk untuk dropdown
-        $namaProdukList = Produk::pluck('nama_produk')->unique();
-
-        return view('produk.index', compact('produk', 'namaProdukList'));
+        return view('produk.index', compact('produk'));
     }
-
 
     public function store(Request $request)
     {
-        //validasi inputan nilai pada tambah produk
         $request->validate([
             'kode_produk' => 'required|unique:produk',
-            'nama_produk' => 'required',
-            'jenis' => 'required',
-            'warna' => 'required',
-            'ukuran' => 'required',
-            'harga' => 'required|numeric',
+            'foto_produk' => 'required|image',
+            'spik_produk' => 'required|image',
+            'keterangan' => 'required',
         ]);
-        //menyimpan data produk yang sudah divalidasi
-        $simpan = Produk::create($request->all());
 
-        //kondisi untuk mengecek apakah sidah tesimpan pada database
+        $data = $request->all();
+
+        // upload foto produk
+        if ($request->hasFile('foto_produk')) {
+            $file = $request->file('foto_produk');
+            $namaFile = time().'_foto.'.$file->getClientOriginalExtension();
+            $file->move(public_path('foto'), $namaFile);
+            $data['foto_produk'] = $namaFile;
+        }
+
+        // upload spik produk (gambar)
+        if ($request->hasFile('spik_produk')) {
+            $file = $request->file('spik_produk');
+            $namaFile = time().'_spik.'.$file->getClientOriginalExtension();
+            $file->move(public_path('foto'), $namaFile);
+            $data['spik_produk'] = $namaFile;
+        }
+
+        $simpan = Produk::create($data);
+
         if ($simpan) {
             return Redirect::back()->with(['success' => 'Data Berhasil Disimpan!']);
         } else {
@@ -49,46 +56,64 @@ class ProdukController extends Controller
 
     public function edit($id)
     {
-        //varibel yang menampung data produk berdasarkan id produk
         $produk = Produk::findOrFail($id);
-        //menampilannya ke modal edit produk
         return view('produk.edit', compact('produk'));
     }
 
     public function update(Request $request, $id)
     {
-        //validasi inputan edit produk
         $request->validate([
-            'nama_produk' => 'required',
-            'jenis' => 'required',
-            'warna' => 'required',
-            'ukuran' => 'required',
-            'harga' => 'required|numeric',
+            'keterangan' => 'required',
         ]);
 
-        //mencari data produk berdasarkan id yang akan diubah
         $produk = Produk::findOrFail($id);
-        $update = $produk->update($request->all());
+        $data = $request->all();
 
-        //kondisi untuk mengecek apakah sidah terubah pada database
+        if ($request->hasFile('foto_produk')) {
+            if ($produk->foto_produk && File::exists(public_path('foto/' . $produk->foto_produk))) {
+                File::delete(public_path('foto/' . $produk->foto_produk));
+            }
+            $file = $request->file('foto_produk');
+            $namaFile = time().'_foto.'.$file->getClientOriginalExtension();
+            $file->move(public_path('foto'), $namaFile);
+
+            $data['foto_produk'] = $namaFile;
+        }
+        if ($request->hasFile('spik_produk')) {
+            if ($produk->spik_produk && File::exists(public_path('foto/' . $produk->spik_produk))) {
+                File::delete(public_path('foto/' . $produk->spik_produk));
+            }
+            $file = $request->file('spik_produk');
+            $namaFile = time().'_spik.'.$file->getClientOriginalExtension();
+            $file->move(public_path('foto'), $namaFile);
+
+            $data['spik_produk'] = $namaFile;
+        }
+
+        $update = $produk->update($data);
+
         if ($update) {
-            return Redirect::back()->with(['success' => 'Data produk berhasil diupdate!']);
+            return Redirect::back()->with(['success' => 'Data berhasil diupdate!']);
         } else {
-            return Redirect::back()->with(['warning' => 'Data produk gagal diupdate!']);
+            return Redirect::back()->with(['warning' => 'Data gagal diupdate!']);
         }
     }
 
     public function delete($id)
     {
-        //mecari data produk berdasarkan id
         $produk = Produk::findOrFail($id);
-        //variabel untuk mengahapus data produk
-        $delete = $produk->delete();
+        if ($produk->foto_produk && File::exists(public_path('foto/' . $produk->foto_produk))) {
+            File::delete(public_path('foto/' . $produk->foto_produk));
+        }
+        if ($produk->spik_produk && File::exists(public_path('foto/' . $produk->spik_produk))) {
+            File::delete(public_path('foto/' . $produk->spik_produk));
+        }
+        $produk->delete();
 
-        if ($delete) {
-            return redirect()->route('produk.index')->with('success', 'Data produk berhasil dihapus!');
+        if ($produk) {
+            return redirect()->route('produk.index')->with('success', 'Data berhasil dihapus!');
         } else {
-            return redirect()->back()->with('warning', 'Data produk gagal dihapus!');
+            return redirect()->back()->with('warning', 'Data gagal dihapus!');
         }
     }
 }

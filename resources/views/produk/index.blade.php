@@ -82,21 +82,13 @@
                                     </div>
                                     <form action="/produk" method="GET" class="d-flex flex-column flex-sm-row mb-2"
                                         style="gap: 10px;">
-                                        <select name="nama_produk" class="form-select" style="min-width: 200px;">
-                                            <option value="" {{ Request('nama_produk') == '' ? 'selected' : '' }}>
-                                                Semua Produk</option>
-                                            @foreach ($namaProdukList as $nama)
-                                                <option {{ Request('nama_produk') == $nama ? 'selected' : '' }}
-                                                    value="{{ $nama }}">
-                                                    {{ $nama }}
-                                                </option>
-                                            @endforeach
-                                        </select>
+
+                                        <input type="text" name="kode_produk"
+                                            class="form-control"value="{{ Request('kode_produk') }}">
                                         <button type="submit" class="btn btn-secondary w-100 w-sm-auto">
                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                 class="icon icon-tabler icon-tabler-search" width="20" height="20"
-                                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none"
-                                                stroke-linecap="round" stroke-linejoin="round">
+                                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none">
                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                 <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
                                                 <path d="M21 21l-6 -6" />
@@ -108,41 +100,82 @@
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered">
+                                    <div class="table">
+                                        <table class="table table-vcenter card-table">
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Kode</th>
-                                                    <th>Nama</th>
-                                                    <th>Jenis</th>
-                                                    <th>Warna</th>
-                                                    <th>Ukuran</th>
-                                                    <th>Harga</th>
-                                                    <th>Aksi</th>
+                                                    <th>Produk</th>
+                                                    <th>Foto</th>
+                                                    <th>Spik</th>
+                                                    <th>Keterangan</th>
+                                                    <th class="w-1"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach ($produk as $data)
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
-                                                        <td>{{ $data->kode_produk }}</td>
-                                                        <td>{{ $data->nama_produk }}</td>
-                                                        <td>{{ $data->jenis }}</td>
-                                                        <td>{{ $data->warna }}</td>
-                                                        <td>{{ $data->ukuran }}</td>
-                                                        <td>Rp {{ number_format($data->harga, 0, ',', '.') }}</td>
                                                         <td>
-                                                            <div style="display: flex; gap: 5px;">
-                                                                <a class="btn btn-sm btn-info editProdukBtn"
-                                                                    data-id="{{ $data->id }}">Ubah</a>
-                                                                <form action="{{ route('produk.delete', $data->id) }}"
-                                                                    method="POST">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <button type="submit"
-                                                                        class="btn btn-danger btn-sm delete-confirm">Hapus</button>
-                                                                </form>
+                                                            <div class="flex-fill">
+                                                                <div class="font-weight-medium">{{ $data->kode_produk }}
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="d-flex py-1 align-items-center">
+                                                                <span class="avatar avatar-sm preview-img"
+                                                                    data-img="{{ asset('foto/' . $data->foto_produk) }}"
+                                                                    data-type="foto"
+                                                                    style="background-image: url('{{ asset('foto/' . $data->foto_produk) }}'); cursor:pointer">
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                        <!-- SPIK -->
+                                                        <td>
+                                                            <span class="avatar avatar-sm preview-img"
+                                                                data-img="{{ asset('foto/' . $data->spik_produk) }}"
+                                                                data-type="spik"
+                                                                style="background-image: url('{{ asset('foto/' . $data->spik_produk) }}'); cursor:pointer">
+                                                            </span>
+                                                        </td>
+
+                                                        <!-- KETERANGAN -->
+                                                        <td>
+                                                            @if ($data->keterangan == 'aktif')
+                                                                <span class="badge bg-success">Aktif</span>
+                                                            @else
+                                                                <span class="badge bg-danger">Tidak Aktif</span>
+                                                            @endif
+                                                        </td>
+
+                                                        <!-- ACTION DROPDOWN -->
+                                                        <td class="text-end">
+                                                            <div class="btn-list flex-nowrap">
+                                                                <!-- dropdown -->
+                                                                <div class="dropdown">
+                                                                    <button
+                                                                        class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                                                                        data-bs-toggle="dropdown">
+                                                                        Aksi
+                                                                    </button>
+                                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                                        <a class="dropdown-item editProdukBtn"
+                                                                            data-id="{{ $data->id }}">
+                                                                            Edit
+                                                                        </a>
+                                                                        <form
+                                                                            action="{{ route('produk.delete', $data->id) }}"
+                                                                            method="POST">
+                                                                            @csrf
+                                                                            @method('DELETE')
+                                                                            <button
+                                                                                class="dropdown-item text-danger delete-confirm">
+                                                                                Hapus
+                                                                            </button>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -208,23 +241,6 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                         stroke-linecap="round" stroke-linejoin="round"
-                                        class="icon icon-tabler icons-tabler-outline icon-tabler-tag">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M7.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                                        <path
-                                            d="M3 6v5.172a2 2 0 0 0 .586 1.414l7.71 7.71a2.41 2.41 0 0 0 3.408 0l5.592 -5.592a2.41 2.41 0 0 0 0 -3.408l-7.71 -7.71a2 2 0 0 0 -1.414 -.586h-5.172a3 3 0 0 0 -3 3z" />
-                                    </svg>
-                                </span>
-                                <input type="text" name="nama_produk" id="nama_produk" value=""
-                                    class="form-control" placeholder="Nama Produk">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-icon mb-3">
-                                <span class="input-icon-addon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round"
                                         class="icon icon-tabler icons-tabler-outline icon-tabler-shirt-sport">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                         <path
@@ -232,8 +248,9 @@
                                         <path d="M10.5 11h2.5l-1.5 5" />
                                     </svg>
                                 </span>
-                                <input type="text" name="jenis" id="jenis" value="" class="form-control"
-                                    placeholder="Jenis">
+                                <input type="file" name="foto_produk" id="foto_produk" class="form-control">
+                                <img id="preview_foto" src="#" width="100"
+                                    style="display:none; margin-top:10px;">
                             </div>
                         </div>
                         <div class="row">
@@ -251,47 +268,27 @@
                                         <path d="M16.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
                                     </svg>
                                 </span>
-                                <input type="text" name="warna" id="warna" value="" class="form-control"
-                                    placeholder="Warna">
+                                <input type="file" name="spik_produk" id="spik_produk" class="form-control">
+                                <img id="preview_spik" src="#" width="100"
+                                    style="display:none; margin-top:10px;">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="input-icon mb-3">
-                                <span class="input-icon-addon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round"
-                                        class="icon icon-tabler icons-tabler-outline icon-tabler-dimensions">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M3 5h11" />
-                                        <path d="M12 7l2 -2l-2 -2" />
-                                        <path d="M5 3l-2 2l2 2" />
-                                        <path d="M19 10v11" />
-                                        <path d="M17 19l2 2l2 -2" />
-                                        <path d="M21 12l-2 -2l-2 2" />
-                                        <path
-                                            d="M3 10m0 2a2 2 0 0 1 2 -2h7a2 2 0 0 1 2 2v7a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2z" />
-                                    </svg>
-                                </span>
-                                <input type="text" name="ukuran" id="ukuran" value="" class="form-control"
-                                    placeholder="Ukuran">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-icon mb-3">
-                                <span class="input-icon-addon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round"
-                                        class="icon icon-tabler icons-tabler-outline icon-tabler-receipt-2">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path
-                                            d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2" />
-                                        <path d="M14 8h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5m2 0v1.5m0 -9v1.5" />
-                                    </svg>
-                                </span>
-                                <input type="number" name="harga" id="harga" value="" class="form-control"
-                                    placeholder="Harga">
+                        <div class="mb-3">
+                            <label class="form-label">Keterangan</label>
+                            <div class="form-selectgroup form-selectgroup-pills">
+
+                                <label class="form-selectgroup-item">
+                                    <input type="radio" name="keterangan" value="aktif"
+                                        class="form-selectgroup-input">
+                                    <span class="form-selectgroup-label">Aktif</span>
+                                </label>
+
+                                <label class="form-selectgroup-item">
+                                    <input type="radio" name="keterangan" value="tidak_aktif"
+                                        class="form-selectgroup-input">
+                                    <span class="form-selectgroup-label">Tidak Aktif</span>
+                                </label>
+
                             </div>
                         </div>
                         <div class="row mt-2">
@@ -319,6 +316,25 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalPreview" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-transparent border-0 shadow-none">
+                <div class="modal-body text-center p-0">
+
+                    <!-- GAMBAR -->
+                    <img id="imgPreviewModal" class="img-preview-custom">
+
+                    <!-- LINK DETAIL -->
+                    <div class="mt-2">
+                        <a id="detailLink" href="#" target="_blank" class="text-primary small">
+                            Lihat Detail
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @push('myscript')
     <script>
@@ -326,6 +342,8 @@
             $("#btnTambahProduk").click(function() {
                 $("#modal-inputproduk").modal("show");
             });
+
+            // edit
             $(".editProdukBtn").click(function() {
                 let id = $(this).data('id');
                 $.get('/produk/' + id + '/edit', function(data) {
@@ -333,103 +351,36 @@
                     $('#modal-editproduk').modal('show');
                 });
             });
+
+            // delete
             $(".delete-confirm").click(function(e) {
                 var form = $(this).closest('form');
                 e.preventDefault();
+
                 Swal.fire({
                     title: "Apakah Yakin?",
                     text: "Ingin Menghapus Data Produk Ini",
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
                     confirmButtonText: "Ya, Hapus!"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        Swal.fire({
-                            title: "Dihapus!",
-                            text: "Data sudah dihapus.",
-                            icon: "success",
-                            confirmButtonText: "OK"
-                        }).then(() => {
-                            form.submit();
-                        });
+                        form.submit();
                     }
                 });
             });
+
+            // validasi form
             $("#frmProduk").submit(function() {
                 var kode_produk = $("#kode_produk").val();
-                var nama_produk = $("#nama_produk").val();
-                var jenis = $("#jenis").val();
-                var warna = $("#warna").val();
-                var ukuran = $("#ukuran").val();
-                var harga = $("#harga").val();
+                var keterangan = $("input[name='keterangan']:checked").val();
 
                 if (kode_produk == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Kode Produk Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'OK',
-                        didClose: () => {
-                            $("#kode_produk").focus();
-                        }
-                    });
+                    Swal.fire('Warning!', 'Kode Produk Harus Diisi!', 'warning');
                     return false;
-                } else if (nama_produk == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Nama Produk Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'OK',
-                        didClose: () => {
-                            $("#nama_produk").focus();
-                        }
-                    });
-                    return false;
-                } else if (jenis == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Jenis Produk Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'OK',
-                        didClose: () => {
-                            $("#jenis").focus();
-                        }
-                    });
-                    return false;
-                } else if (warna == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Warna Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'OK',
-                        didClose: () => {
-                            $("#warna").focus();
-                        }
-                    });
-                    return false;
-                } else if (ukuran == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Ukuran Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'OK',
-                        didClose: () => {
-                            $("#ukuran").focus();
-                        }
-                    });
-                    return false;
-                } else if (harga == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Harga Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'OK',
-                        didClose: () => {
-                            $("#harga").focus();
-                        }
-                    });
+                }
+                if (!keterangan) {
+                    Swal.fire('Warning!', 'Keterangan Harus Dipilih!', 'warning');
                     return false;
                 }
             });
@@ -439,6 +390,40 @@
                     new bootstrap.Toast(toastEl).hide();
                 }
             }, 5000);
+        });
+        // preview sebelum upload
+        $("#foto_produk").change(function() {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                $("#preview_foto").attr("src", e.target.result).show();
+            }
+            reader.readAsDataURL(this.files[0]);
+        });
+
+        $("#spik_produk").change(function() {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                $("#preview_spik").attr("src", e.target.result).show();
+            }
+            reader.readAsDataURL(this.files[0]);
+        });
+
+        // preview klik gambar di tabel
+        $(document).on('click', '.preview-img', function() {
+            let src = $(this).data('img');
+            let nama = $(this).closest('tr').find('.font-weight-medium').text();
+            let type = $(this).data('type');
+
+            $("#imgPreviewModal").attr('src', src);
+
+            $("#detailLink").attr(
+                'href',
+                '/viewer?img=' + encodeURIComponent(src) +
+                '&nama=' + encodeURIComponent(nama) +
+                '&type=' + encodeURIComponent(type)
+            );
+
+            $("#modalPreview").modal('show');
         });
     </script>
 @endpush
