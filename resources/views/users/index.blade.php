@@ -49,9 +49,8 @@
                                                 <span class="avatar avatar-xl mb-3 rounded"
                                                     style="background-image: url({{ asset('tabler/static/Z2.png') }})"></span>
                                                 <h3 class="m-0 mb-1"><a href="#">{{ $user->name }}</a></h3>
-                                                <div class="text-muted">{{ $user->email }}</div>
                                                 <div class="mt-3">
-                                                    <span class="badge bg-purple-lt">Admin</span>
+                                                    <span class="badge bg-purple-lt">{{ $user->role }}</span>
                                                 </div>
                                             </div>
                                             <div class="d-flex align-items-center">

@@ -25,20 +25,6 @@ Route::middleware('auth')->group(function () {
         return view('about.about');
     })->name('about');
 
-    Route::get('/transaksi/template-download', function () {
-        $file = public_path('download/template-import-transaksi.xlsx');
-        return response()->download($file);
-    })->name('transaksi.download-template');
-
-    //user
-    Route::get('/user', [UserController::class, 'index'])->name('users.index');
-    Route::get('/user/create', [UserController::class, 'create'])->name('users.create');
-    Route::post('/user', [UserController::class, 'store'])->name('users.store');
-    Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
-    Route::put('/user/{id}', [UserController::class, 'update'])->name('users.update');
-    Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('users.destroy');
-
-    //produk
     Route::get('/produk', [ProdukController::class, 'index'])->name('produk.index');
     Route::get('/produk/create', [ProdukController::class, 'create'])->name('produk.create');
     Route::post('/produk', [ProdukController::class, 'store'])->name('produk.store');
@@ -49,4 +35,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/viewer', function () {
         return view('produk.viewer');
     });
+});
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+
+    // USER (CRUD user hanya admin)
+    Route::get('/user', [UserController::class, 'index'])->name('users.index');
+    Route::get('/user/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/user', [UserController::class, 'store'])->name('users.store');
+    Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/user/{id}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 });

@@ -75,11 +75,11 @@
                                 <form action="{{ route('auth.login') }}" method="POST" autocomplete="off" novalidate>
                                     @csrf
                                     <div class="mb-3">
-                                        <label class="form-label" style="color: rgb(19, 19, 114)">Email</label>
-                                        <input type="email" name="email" value="{{ old('email') }}"
-                                            class="form-control @error('email') is-invalid animate-error @enderror"
-                                            placeholder="your@email.com" autocomplete="off">
-                                        @error('email')
+                                        <label class="form-label" style="color: rgb(19, 19, 114)">Username</label>
+                                        <input type="username" name="username" value="{{ old('username') }}"
+                                            class="form-control @error('username') is-invalid animate-error @enderror"
+                                            placeholder="Username" autocomplete="off">
+                                        @error('username')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
                                             </div>
@@ -118,10 +118,10 @@
                                         <button type="submit" class="btn btn-dark w-100">Sign in</button>
                                     </div>
                                 </form>
-                                @if ($errors->has('email'))
+                                @if ($errors->has('username'))
                                     <script>
                                         $(document).ready(function() {
-                                            $('input[name="email"]').focus();
+                                            $('input[name="username"]').focus();
                                         });
                                     </script>
                                 @endif

@@ -17,9 +17,9 @@
                                 value="{{ $user->name }}" required>
                         </div>
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" name="email" id="email" class="form-control"
-                                value="{{ $user->email }}" required>
+                            <label for="username" class="form-label">Username</label>
+                            <input type="username" name="username" id="username" class="form-control"
+                                value="{{ $user->username }}" required>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
@@ -27,7 +27,6 @@
                                 <input type="password" name="password" id="password" class="form-control" required>
                                 <span class="input-group-text show-password" style="cursor: pointer;"
                                     onclick="togglePassword()">
-                                    <!-- icon mata -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                         stroke-linecap="round" stroke-linejoin="round">
@@ -38,6 +37,21 @@
                                         <path d="M3 3l18 18" />
                                     </svg>
                                 </span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Role</label>
+                            <div class="form-selectgroup form-selectgroup-pills">
+                                <label class="form-selectgroup-item">
+                                    <input type="radio" name="role" value="admin" class="form-selectgroup-input"
+                                        {{ $user->role == 'admin' ? 'checked' : '' }}>
+                                    <span class="form-selectgroup-label">Admin</span>
+                                </label>
+                                <label class="form-selectgroup-item">
+                                    <input type="radio" name="role" value="user" class="form-selectgroup-input"
+                                        {{ $user->role == 'user' ? 'checked' : '' }}>
+                                    <span class="form-selectgroup-label">User</span>
+                                </label>
                             </div>
                         </div>
                         <div class="text-end">

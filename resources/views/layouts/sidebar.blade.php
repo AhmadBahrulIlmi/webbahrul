@@ -189,10 +189,6 @@
                     aria-label="Open user menu">
                     <span class="avatar avatar-sm"
                         style="background-image: url({{ asset('tabler/static/Z2.png') }})"></span>
-                    <div class="d-none d-xl-block ps-2">
-                        <div>Iqo Musslihah</div>
-                        <div class="mt-1 small text-muted">Admin</div>
-                    </div>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                     <a href="{{ route('about') }}" class="dropdown-item">About Us</a>
@@ -241,88 +237,28 @@
                         </span>
                     </a>
                 </li>
-                {{-- <li class="nav-item">
-                    <a class="nav-link" href="/transaksi">
-                        <span
-                            class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round"
-                                class="icon icon-tabler icons-tabler-outline icon-tabler-list-details">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M13 5h8" />
-                                <path d="M13 9h5" />
-                                <path d="M13 15h8" />
-                                <path d="M13 19h5" />
-                                <path
-                                    d="M3 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />
-                                <path
-                                    d="M3 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />
-                            </svg>
-                        </span>
-                        <span class="nav-link-title">
-                            Transaksi
-                        </span>
-                    </a>
-                </li> --}}
-                {{-- <li class="nav-item">
-                    <a class="nav-link" href="/peramalan">
-                        <span
-                            class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round"
-                                class="icon icon-tabler icons-tabler-outline icon-tabler-brand-databricks">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M3 17l9 5l9 -5v-3l-9 5l-9 -5v-3l9 5l9 -5v-3l-9 5l-9 -5l9 -5l5.418 3.01" />
-                            </svg>
-                        </span>
-                        <span class="nav-link-title">
-                            Peramalan
-                        </span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/evaluasi">
-                        <span
-                            class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round"
-                                class="icon icon-tabler icons-tabler-outline icon-tabler-presentation">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M3 4l18 0" />
-                                <path d="M4 4v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-10" />
-                                <path d="M12 16l0 4" />
-                                <path d="M9 20l6 0" />
-                                <path d="M8 12l3 -3l2 2l3 -3" />
-                            </svg>
-                        </span>
-                        <span class="nav-link-title">
-                            Evaluasi Hasil
-                        </span>
-                    </a>
-                </li> --}}
-                <li class="nav-item">
-                    <a class="nav-link" href="/user">
-                        <span
-                            class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round"
-                                class="icon icon-tabler icons-tabler-outline icon-tabler-users">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
-                                <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                                <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
-                            </svg>
-                        </span>
-                        <span class="nav-link-title">
-                            User
-                        </span>
-                    </a>
-                </li>
+                @if(auth()->user()->role == 'admin')
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user">
+                            <span
+                                class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round"
+                                    class="icon icon-tabler icons-tabler-outline icon-tabler-users">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                                    <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                    <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
+                                </svg>
+                            </span>
+                            <span class="nav-link-title">
+                                User
+                            </span>
+                        </a>
+                    </li>
+                @endif
             </ul>
         </div>
     </div>

@@ -160,7 +160,7 @@
                         style="background-image: url({{ asset('tabler/static/Z2.png') }})"></span>
                     <div class="d-none d-xl-block ps-2">
                         <div>{{ Auth::user()->name }}</div>
-                        <div class="mt-1 small text-muted">Admin</div>
+                        <div class="mt-1 small text-muted">{{ auth()->user()->role }}</div>
                     </div>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">

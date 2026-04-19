@@ -15,8 +15,8 @@
                             <input type="text" name="name" id="name" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" name="email" id="email" class="form-control" required>
+                            <label for="username" class="form-label">Username</label>
+                            <input type="username" name="username" id="username" class="form-control" required>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
@@ -35,6 +35,20 @@
                                         <path d="M3 3l18 18" />
                                     </svg>
                                 </span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Role</label>
+                            <div class="form-selectgroup form-selectgroup-pills">
+                                <label class="form-selectgroup-item">
+                                    <input type="radio" name="role" value="admin" class="form-selectgroup-input">
+                                    <span class="form-selectgroup-label">Admin</span>
+                                </label>
+                                <label class="form-selectgroup-item">
+                                    <input type="radio" name="role" value="user" class="form-selectgroup-input"
+                                        checked>
+                                    <span class="form-selectgroup-label">User</span>
+                                </label>
                             </div>
                         </div>
                         <div class="text-end">

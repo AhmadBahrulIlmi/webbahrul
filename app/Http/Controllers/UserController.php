@@ -18,21 +18,23 @@ class UserController extends Controller
         return view('users.create');
     }
 
-    public function store(Request $request)
+   public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'username' => 'required|unique:users,username',
             'password' => 'required|string|min:6',
+            'role' => 'required|in:admin,user'
         ]);
 
         User::create([
             'name' => $request->name,
-            'email' => $request->email,
+            'username' => $request->username,
             'password' => bcrypt($request->password),
+            'role' => $request->role
         ]);
 
-        return redirect()->route('users.index')->with('success', 'User has been created successfully.');
+        return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan');
     }
 
     public function edit($id)
@@ -45,18 +47,24 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $id,
+            'username' => 'required|unique:users,username,' . $id,
             'password' => 'nullable|string|min:6',
+            'role' => 'required|in:admin,user'
         ]);
 
         $user = User::findOrFail($id);
+
         $user->update([
             'name' => $request->name,
-            'email' => $request->email,
+            'username' => $request->username,
             'password' => $request->password ? bcrypt($request->password) : $user->password,
+            'role' => $request->role
         ]);
+        if (auth()->id() == $id && $request->role != 'admin') {
+            return back()->with('error', 'Tidak bisa mengubah role akun sendiri!');
+        }
 
-        return redirect()->route('users.index')->with('success', 'User has been updated successfully.');
+        return redirect()->route('users.index')->with('success', 'User berhasil diupdate');
     }
 
     public function destroy($id)

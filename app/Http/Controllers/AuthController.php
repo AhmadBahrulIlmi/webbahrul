@@ -15,30 +15,30 @@ class AuthController extends Controller
     }
     public function login(Request $request)
     {
-        //menyimpan email yang diinput user ke session sementara agar tetap muncul jika login gagal
-        Session::flash('email', $request->email);
+        //menyimpan username yang diinput user ke session sementara agar tetap muncul jika login gagal
+        Session::flash('username', $request->username);
 
         //validasi Inputan Login
         $request->validate([
-            'email' => 'required|email',
+            'username' => 'required|string',
             'password' => 'required'
         ]);
 
         //mencari data user pada database
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('username', $request->username)->first();
 
         if (!$user) {
-            //jika email tidak ditemukan pada database maka fokus ke field email
+            //jika username tidak ditemukan pada database maka fokus ke field username
             return back()->withErrors([
-                'email' => 'Email tidak ditemukan!',
-            ])->onlyInput('email');
+                'username' => 'Username tidak ditemukan!',
+            ])->onlyInput('username');
         }
 
-        if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            //jika password tidak ditemukan pada database maka fokus ke field email
+        if (!Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
+            //jika password tidak ditemukan pada database maka fokus ke field username
             return back()->withErrors([
                 'password' => 'Password salah!',
-            ])->onlyInput('email');
+            ])->onlyInput('username');
         }
 
         $request->session()->regenerate();
